@@ -6,9 +6,17 @@ class Bootloader extends Phaser.Scene {
   preload() {
     console.log("Bootloader");
     this.load.setPath("./assets/");
+
+    this.load.image("start", "start.png");
+    this.load.image("backgroundMenu", "backgroundMenu.png");
+    this.load.image("bird", "bird.png");
+    this.load.atlas("flue", "flue.png", "flue-atlas.json");
   }
 
-  create() {}
+  create() {
+    // this.scene.start("Menu");
+    this.scene.start("Game");
+  }
 }
 
 export default Bootloader;
