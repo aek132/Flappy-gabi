@@ -1,6 +1,6 @@
 import Bird from "../gameObjects/Bird.js";
 
-class Game extends Phaser.Scene {
+export default class Game extends Phaser.Scene {
   constructor() {
     super("Game");
   }
@@ -16,10 +16,15 @@ class Game extends Phaser.Scene {
   create() {
     this.bird = new Bird(this, 100, this.data.get("centerH"), "bird");
 
-    this.tubos = this.physics.add.group();
+    this.tubos = this.physics.add.group({
+      allowGravity: false,
+      immovable: true,
+    });
 
     this.pipeOffset = 300;
     this.generateFirstPipePair();
+
+    this.physics.add.collider(this.bird, this.tubos, this.gameOver, null, this);
   }
 
   update() {
@@ -67,6 +72,9 @@ class Game extends Phaser.Scene {
 
     this.tubos.setVelocityX(velocidadTubos);
   }
-}
 
-export default Game;
+  gameOver() {
+    this.scene.launch("GameOver");
+    this.scene.pause("Game");
+  }
+}
