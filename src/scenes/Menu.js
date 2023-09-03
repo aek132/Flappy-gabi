@@ -18,12 +18,14 @@ export default class Menu extends Phaser.Scene {
       this.scale.width / this.backgroundMenu.width,
       this.scale.height / this.backgroundMenu.height
     );
+
     this.start = this.add.image(centerW, centerH, "start").setScale(0.5);
 
     this.start.setInteractive();
 
     this.start.on("pointerdown", () => {
-      this.scene.start("Game", centerH);
+      this.scene.launch("Game", centerH);
+      this.start.destroy();
     });
   }
 }

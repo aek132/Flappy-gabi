@@ -14,29 +14,58 @@ class Game extends Phaser.Scene {
   }
 
   create() {
-    const centerW = this.scale.width / 2;
-    const centerH = this.scale.height / 2;
-
-    const weightFlue = centerW + 100;
-    const heightFlueUp = 60;
-    const heightFlueDown = this.scale.height - 60;
-
     this.bird = new Bird(this, 100, this.data.get("centerH"), "bird");
 
-    this.flueUp = this.add
-      .sprite(weightFlue, heightFlueUp, "flue", "flue_1")
-      .setScale(2);
-    this.flueDown = this.add
-      .sprite(weightFlue, heightFlueDown, "flue", "flue_2")
-      .setScale(2);
+    this.tubos = this.physics.add.group();
 
-    let groupFlues = this.add.container(0, 0);
+    this.pipeOffset = 300;
+    this.generateFirstPipePair();
+  }
 
-    groupFlues.add([this.flueUp, this.flueDown]);
+  update() {
+    this.tubos.children.iterate((pipe) => {
+      if (pipe && pipe.x < -pipe.width) {
+        pipe.destroy();
+      }
+    });
 
-    var numRand = Phaser.Math.Between(-100, 100);
-    console.log(numRand);
-    groupFlues.y = numRand;
+    const lastPipe = this.tubos.getChildren()[this.tubos.getLength() - 1];
+
+    if (lastPipe && lastPipe.x < this.scale.width / 2) {
+      console.log("entrado para generar");
+      this.generatePipes(this.scale.width);
+    }
+  }
+
+  generateFirstPipePair() {
+    this.generatePipes(this.scale.width + this.pipeOffset);
+  }
+
+  generatePipes(x) {
+    const pipeSpacing = 300;
+    const velocidadTubos = -200;
+
+    const upperPipe = this.tubos.create(
+      x,
+      Phaser.Math.Between(60, 240),
+      "flue",
+      "flue_1"
+    );
+    const lowerPipe = this.tubos.create(
+      x,
+      upperPipe.y + pipeSpacing,
+      "flue",
+      "flue_2"
+    );
+
+    const pipeScale = 2;
+    upperPipe.setScale(pipeScale);
+    lowerPipe.setScale(pipeScale);
+
+    upperPipe.y -= (upperPipe.height / 2) * (pipeScale - 1);
+    lowerPipe.y += (lowerPipe.height / 2) * (pipeScale - 1);
+
+    this.tubos.setVelocityX(velocidadTubos);
   }
 }
 

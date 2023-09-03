@@ -3,6 +3,6 @@ export default class Bird extends Phaser.GameObjects.Sprite {
     super(scene, x, y, type);
     scene.add.existing(this);
     this.scene.physics.world.enable(this);
-    this.setScale(0.2);
+    this.setScale(0.15);
   }
 }
