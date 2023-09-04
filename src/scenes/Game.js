@@ -3,6 +3,8 @@ import Bird from "../gameObjects/Bird.js";
 export default class Game extends Phaser.Scene {
   constructor() {
     super("Game");
+    this.score = 0;
+    this.hasPassedPipeThisFrame = false;
   }
 
   init(data) {
@@ -14,9 +16,6 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-    // Va a generar al pajaro
-    // this.bird = new Bird(this, 100, this.data.get("centerH"), "bird");
-
     this.bird = new Bird(
       this,
       this.scale.width / 2 - 100,
@@ -26,7 +25,9 @@ export default class Game extends Phaser.Scene {
 
     // Movimiento del pajaro
     this.input.keyboard.on("keydown-SPACE", this.jump, this);
+    this.input.on("pointerdown", this.jump, this);
 
+    // Tubos
     this.tubos = this.physics.add.group({
       allowGravity: false,
       immovable: true,
@@ -36,20 +37,48 @@ export default class Game extends Phaser.Scene {
     this.generateFirstPipePair();
 
     // this.physics.add.collider(this.bird, this.tubos, this.gameOver, null, this);
+
+    // Score
+    this.scoreText = this.add.text(this.scale.width / 2, 50, "0", {
+      fontSize: "32px",
+      fill: "#fff",
+    });
+    this.scoredThisFrame = false;
   }
 
   update() {
     this.tubos.children.iterate((pipe) => {
       if (pipe && pipe.x < -pipe.width) {
         pipe.destroy();
+        this.scoredThisFrame = true;
       }
     });
 
     const lastPipe = this.tubos.getChildren()[this.tubos.getLength() - 1];
 
     if (lastPipe && lastPipe.x < this.scale.width / 2) {
-      console.log("entrado para generar");
       this.generatePipes(this.scale.width);
+    }
+
+    // Comprobar y sumar Score
+    const tubosArray = this.tubos.getChildren();
+    const birdX = this.bird.x;
+
+    for (let i = 0; i < tubosArray.length; i += 2) {
+      const upperPipe = tubosArray[i];
+      const lowerPipe = tubosArray[i + 1];
+
+      // Verifica si el pájaro ha pasado por los tubos
+      if (
+        upperPipe.x + upperPipe.width < birdX &&
+        !upperPipe.scored &&
+        !lowerPipe.scored
+      ) {
+        upperPipe.scored = true;
+        lowerPipe.scored = true;
+        this.score += 1;
+        this.scoreText.setText(this.score );
+      }
     }
   }
 
@@ -58,12 +87,12 @@ export default class Game extends Phaser.Scene {
   }
 
   generatePipes(x) {
-    const pipeSpacing = 300;
+    const pipeSpacing = 280;
     const velocidadTubos = -200;
 
     const upperPipe = this.tubos.create(
       x,
-      Phaser.Math.Between(60, 240),
+      Phaser.Math.Between(80, 240),
       "flue",
       "flue_1"
     );
@@ -82,6 +111,8 @@ export default class Game extends Phaser.Scene {
     lowerPipe.y += (lowerPipe.height / 2) * (pipeScale - 1);
 
     this.tubos.setVelocityX(velocidadTubos);
+
+    this.tubos.getChildren()[0].scored = false;
   }
 
   gameOver() {
@@ -89,7 +120,7 @@ export default class Game extends Phaser.Scene {
     this.scene.pause("Game");
   }
 
-  jump(){
+  jump() {
     this.bird.jump();
   }
 }

@@ -16,7 +16,7 @@ const config = {
   physics: {
     default: "arcade", // El motor de física predeterminado
     arcade: {
-      gravity: { y: 400 }, // Gravedad vertical global
+      gravity: { y: 1500 }, // Gravedad vertical global
       debug: false, // Habilitar o deshabilitar el modo de depuración de física
     },
   },
