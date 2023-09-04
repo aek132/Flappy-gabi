@@ -14,7 +14,18 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-    this.bird = new Bird(this, 100, this.data.get("centerH"), "bird");
+    // Va a generar al pajaro
+    // this.bird = new Bird(this, 100, this.data.get("centerH"), "bird");
+
+    this.bird = new Bird(
+      this,
+      this.scale.width / 2 - 100,
+      this.scale.height / 2,
+      "bird"
+    );
+
+    // Movimiento del pajaro
+    this.input.keyboard.on("keydown-SPACE", this.jump, this);
 
     this.tubos = this.physics.add.group({
       allowGravity: false,
@@ -24,7 +35,7 @@ export default class Game extends Phaser.Scene {
     this.pipeOffset = 300;
     this.generateFirstPipePair();
 
-    this.physics.add.collider(this.bird, this.tubos, this.gameOver, null, this);
+    // this.physics.add.collider(this.bird, this.tubos, this.gameOver, null, this);
   }
 
   update() {
@@ -76,5 +87,9 @@ export default class Game extends Phaser.Scene {
   gameOver() {
     this.scene.launch("GameOver");
     this.scene.pause("Game");
+  }
+
+  jump(){
+    this.bird.jump();
   }
 }

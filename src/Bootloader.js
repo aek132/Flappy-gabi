@@ -14,8 +14,8 @@ class Bootloader extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start("Menu");
-    // this.scene.launch("Game");
+    // this.scene.start("Menu");
+    this.scene.launch("Game");
   }
 }
 

@@ -4,8 +4,13 @@ export default class Bird extends Phaser.GameObjects.Sprite {
     scene.add.existing(this);
 
     this.scene.physics.world.enable(this);
-    this.body.setAllowGravity(false);
 
     this.setScale(0.15);
+
+    this.jumpVelocity = -200;
+  }
+
+  jump() {
+    this.body.setVelocityY(this.jumpVelocity);
   }
 }
