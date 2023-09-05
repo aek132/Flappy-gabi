@@ -6,7 +6,7 @@ export default class Bird extends Phaser.GameObjects.Sprite {
     this.scene.physics.world.enable(this);
     this.body.setCollideWorldBounds(true);
 
-    this.setScale(0.15);
+    this.setScale(0.19);
 
     this.jumpVelocity = -450;
   }

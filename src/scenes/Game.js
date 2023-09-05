@@ -16,11 +16,20 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
+    const centerW = this.scale.width / 2;
+    const centerH = this.scale.height / 2;
+
+    this.background = this.add.image(centerW, centerH, "backgroundMiddle");
+    this.background.setScale(
+      this.scale.width / this.background.width,
+      this.scale.height / this.background.height
+    );
+
     this.bird = new Bird(
       this,
       this.scale.width / 2 - 100,
       this.scale.height / 2,
-      "bird"
+      "gabi"
     );
 
     // Movimiento del pajaro
@@ -36,7 +45,8 @@ export default class Game extends Phaser.Scene {
     this.pipeOffset = 300;
     this.generateFirstPipePair();
 
-    // this.physics.add.collider(this.bird, this.tubos, this.gameOver, null, this);
+    // Colision pajaro-tubo
+    this.physics.add.collider(this.bird, this.tubos, this.gameOver, null, this);
 
     // Score
     this.scoreText = this.add.text(this.scale.width / 2, 50, "0", {
@@ -77,7 +87,8 @@ export default class Game extends Phaser.Scene {
         upperPipe.scored = true;
         lowerPipe.scored = true;
         this.score += 1;
-        this.scoreText.setText(this.score );
+        this.scoreText.setText(this.score);
+        this.fondoDespuesTubo();
       }
     }
   }
@@ -87,12 +98,12 @@ export default class Game extends Phaser.Scene {
   }
 
   generatePipes(x) {
-    const pipeSpacing = 280;
+    const pipeSpacing = 300;
     const velocidadTubos = -200;
 
     const upperPipe = this.tubos.create(
       x,
-      Phaser.Math.Between(80, 240),
+      Phaser.Math.Between(60, 240),
       "flue",
       "flue_1"
     );
@@ -116,11 +127,21 @@ export default class Game extends Phaser.Scene {
   }
 
   gameOver() {
-    this.scene.launch("GameOver");
-    this.scene.pause("Game");
+    this.scene.start("GameOver");
   }
 
   jump() {
     this.bird.jump();
+  }
+
+  fondoDespuesTubo() {
+    this.background.setTexture("backgroundWin");
+
+    this.time.delayedCall(
+      500,
+      () => this.background.setTexture("backgroundMiddle"),
+      [],
+      this
+    );
   }
 }

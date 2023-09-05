@@ -10,12 +10,15 @@ class Bootloader extends Phaser.Scene {
     this.load.image("start", "start.png");
     this.load.image("backgroundMenu", "backgroundMenu.png");
     this.load.image("bird", "bird.png");
+    this.load.image("gabi", "gabi.png");
+    this.load.image("backgroundWin", "backgroundWin.jpg");
+    this.load.image("backgroundMiddle", "backgroundMiddle.jpg");
+    this.load.image("backgroundGameOver", "backgroundGameOver.jpg");
     this.load.atlas("flue", "flue.png", "flue-atlas.json");
   }
 
   create() {
-    // this.scene.start("Menu");
-    this.scene.launch("Game");
+    this.scene.start("Menu");
   }
 }
 

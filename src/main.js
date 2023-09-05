@@ -2,6 +2,7 @@ import Game from "./scenes/Game.js";
 import Bootloader from "./Bootloader.js";
 import Menu from "./scenes/Menu.js";
 import GameOver from "./scenes/GameOver.js";
+import GameWin from "./scenes/GameWin.js";
 
 const config = {
   title: "flappy_gabi",
@@ -11,7 +12,6 @@ const config = {
     width: 800,
     height: 600,
   },
-  backgroundColor: "#95afc0",
   pixelArt: true,
   physics: {
     default: "arcade", // El motor de física predeterminado
@@ -20,7 +20,7 @@ const config = {
       debug: false, // Habilitar o deshabilitar el modo de depuración de física
     },
   },
-  scene: [Bootloader, Menu, Game, GameOver],
+  scene: [Bootloader, Menu, Game, GameOver, GameWin],
 };
 
 new Phaser.Game(config);
