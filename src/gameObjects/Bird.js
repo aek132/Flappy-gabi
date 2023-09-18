@@ -1,3 +1,4 @@
+import Phaser from 'phaser';
 export default class Bird extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y, type) {
     super(scene, x, y, type);
